@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
+use Core\Database\Database;
 
 /**
  * @property int $id
@@ -24,6 +25,15 @@ class User extends Model
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function getTotalUsers(): int
+    {
+        $pdo = Database::getDatabaseConn();
+        $resp = $pdo->query('SELECT COUNT(*) as total FROM users');
+        $row = $resp->fetch();
+
+        return $row ? (int) $row['total'] : 0;
     }
     
     public function validates(): void
