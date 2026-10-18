@@ -15,7 +15,7 @@ class Database
         $port = $_ENV['DB_PORT'];
         $db   = $_ENV['DB_DATABASE'];
 
-        $pdo = new PDO('mysql:host=' . $host . ';port=' . $port . ';dbname=' . $db, $user, $pwd);
+        $pdo = new PDO('pgsql:host=' . $host . ';port=' . $port . ';dbname=' . $db, $user, $pwd);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $pdo;
@@ -28,7 +28,7 @@ class Database
         $host = $_ENV['DB_HOST'];
         $port = $_ENV['DB_PORT'];
 
-        $pdo = new PDO('mysql:host=' . $host . ';port=' . $port, $user, $pwd);
+        $pdo = new PDO('pgsql:host=' . $host . ';port=' . $port . ';dbname=postgres', $user, $pwd);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $pdo;
@@ -36,8 +36,13 @@ class Database
 
     public static function create(): void
     {
-        $sql = 'CREATE DATABASE IF NOT EXISTS ' . $_ENV['DB_DATABASE'] . ';';
-        self::getConn()->exec($sql);
+        $dbName = $_ENV['DB_DATABASE'];
+        $statement = self::getConn()->prepare('SELECT 1 FROM pg_database WHERE datname = :database');
+        $statement->execute(['database' => $dbName]);
+
+        if ($statement->fetchColumn() === false) {
+            self::getConn()->exec("CREATE DATABASE {$dbName};");
+        }
     }
 
     public static function drop(): void
@@ -55,5 +60,6 @@ class Database
     public static function exec(string $sql): void
     {
         self::getDatabaseConn()->exec($sql);
-    }
+    }    
+
 }
