@@ -35,7 +35,7 @@ class User extends Model
 
         return $row ? (int) $row['total'] : 0;
     }
-    
+
     public function validates(): void
     {
         Validations::notEmpty('name', $this);

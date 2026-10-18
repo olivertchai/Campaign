@@ -139,4 +139,55 @@ class UserTest extends TestCase
         $this->assertTrue($this->user->authenticate('123456'));
         $this->assertFalse($this->user->authenticate('654321'));
     }
+
+    // 3.1 Métodos do model
+    public function test_is_admin_should_return_true_for_admin_role(): void
+    {
+        $admin = new User([
+            'name'                  => 'Admin',
+            'email'                 => 'admin@example.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456',
+            'role'                  => 'admin',
+            'active'                => true
+        ]);
+        $admin->save();
+
+        $this->assertTrue($admin->isAdmin());
+    }
+
+    public function test_is_admin_should_return_false_for_non_admin_role(): void
+    {
+        $this->assertFalse($this->user->isAdmin());
+    }
+
+    public function test_uniqueness_should_not_allow_duplicate_email(): void
+    {
+        $duplicate = new User([
+            'name'                  => 'Outro',
+            'email'                 => 'fulano@example.com', // mesmo email do $this->user
+            'password'              => '123456',
+            'password_confirmation' => '123456'
+        ]);
+
+        $this->assertFalse($duplicate->save());
+        $this->assertNotNull($duplicate->errors('email'));
+    }
+
+    public function test_new_record_should_return_true_before_save(): void
+    {
+        $user = new User([
+            'name'                  => 'Novo',
+            'email'                 => 'novo@example.com',
+            'password'              => '123456',
+            'password_confirmation' => '123456'
+        ]);
+
+        $this->assertTrue($user->newRecord());
+    }
+
+    public function test_new_record_should_return_false_after_save(): void
+    {
+        $this->assertFalse($this->user->newRecord());
+    }
 }
