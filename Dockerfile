@@ -1,7 +1,6 @@
 FROM php:8.3.4-fpm
 
-RUN docker-php-ext-install pdo pdo_mysql
-RUN docker-php-ext-enable pdo_mysql
-
-RUN apt-get update -y && apt-get install -y libzip-dev zip
-RUN docker-php-ext-install zip
+# Atualiza os pacotes, instala a dependência do Postgres, instala as extensões e limpa o cache
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login de Usuário - Roster</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+     tailwind.config = {
+       darkMode: "class",
+       theme: {
+         extend: {
+           colors: {
+             // Suas cores novas
+             primary: "#ec5b13",
+             "background-light": "#f8f6f6",
+             "background-dark": "#221610",
+             // Cores originais do card de login (para não quebrar)
+             roster: {
+               orange: '#EC5B13',
+               'orange-light': '#F06522',
+               'orange-lighter': '#FF793D',
+             },
+           },
+           fontFamily: {
+             display: ["Public Sans"],
+             sans: ['Inter', 'system-ui', 'sans-serif'], // Mantendo a fonte base do card
+           },
+           borderRadius: {
+             DEFAULT: "0.25rem",
+             lg: "0.5rem",
+             xl: "0.75rem",
+             full: "9999px",
+           },
+         },
+       },
+     };
+   </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-white font-sans flex items-center justify-center p-4">
+  <main class="w-full max-w-md">
+    <!-- Logo + Título -->
+    <div class="flex flex-col items-center text-center mb-8">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="p-1.5 rounded-md bg-primary">
+         <svg
+           class="w-6 h-6 text-white"
+           fill="none"
+           stroke="currentColor"
+           viewbox="0 0 24 24"
+           xmlns="http://www.w3.org/2000/svg"
+         >
+           <path
+             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             stroke-width="2"
+           ></path>
+         </svg>
+       </div>
+        <h1 class="text-2xl font-bold text-gray-900">Roster</h1>
+      </div>
+      <p class="text-sm text-gray-500">Faça login para acessar sua conta</p>
+    </div>
+    <?php require __DIR__ . '/_flash_message.phtml'; ?>
+    <?php require $view ?>
+  </main>
+</body>
+</html>
