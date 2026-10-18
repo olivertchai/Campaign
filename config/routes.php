@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthenticationsController;
+use App\Controllers\CampaignsController;
 use Core\Router\Route;
 
 // Authentication
@@ -10,6 +11,8 @@ Route::post('/login', [AuthenticationsController::class, 'authenticate'])->name(
 Route::middleware('auth')->group(function () {
     // index
     Route::get('/', [CampaignsController::class, 'index'])->name('root');
+    Route::get('/campaigns', [CampaignsController::class, 'index'])->name('campaigns.index');
+
     
     // Logout
     Route::get('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');

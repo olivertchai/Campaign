@@ -21,6 +21,11 @@ class User extends Model
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
 
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+    
     public function validates(): void
     {
         Validations::notEmpty('name', $this);
