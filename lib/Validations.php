@@ -6,6 +6,28 @@ use Core\Database\Database;
 
 class Validations
 {
+    public static function startDateDontBiggerEndDate($startDateField, $endDateField, $obj)
+    {
+
+        $startDateValue = $obj->$startDateField ?? null;
+        $endDateValue = $obj->$endDateField ?? null;
+
+        if (empty($startDateValue) || empty($endDateValue)) {
+            $obj->addError($startDateField, "As datas não podem ser nulas ou estarem vazias");
+            return false;
+        }
+
+        $startDate = \DateTime::createFromFormat('Y-m-d', $startDateValue);
+        $endDate = \DateTime::createFromFormat('Y-m-d', $endDateValue);
+
+        if ($startDate > $endDate) {
+            $obj->addError($startDateField, "Data inicial não pode ser maior que a data Final");
+            return false;
+        }
+
+        return true;
+    }
+
     public static function notEmpty($attribute, $obj)
     {
         if ($obj->$attribute === null || $obj->$attribute === '') {
