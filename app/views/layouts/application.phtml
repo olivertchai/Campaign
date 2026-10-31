@@ -89,38 +89,39 @@
      </div>
 
      <div class="flex flex-1 justify-end gap-8">
-    <nav class="hidden md:flex items-center gap-8">
-        <?php
+       <nav class="hidden md:flex items-center gap-8">
+         <?php
           $currentPath = $_SERVER['REQUEST_URI'] ?? '/';
           $isCampaignsActive = $currentPath === 'campaigns.index' || $currentPath === 'campaigns.index';
           $isCriarCampanhaActive = $currentPath === 'campaigns.new';
           $isBuscarClienteActive = $currentPath === '/pages/buscar-cliente'; // assuming path
           $isUsuariosActive = $currentPath === '/pages/usuarios'; // assuming path
 
-        ?>
-
-        <a
-            class="<?= $currentPath === '/campaigns' ? 'text-primary text-sm font-bold border-b-2 border-primary pb-1' : 'text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors' ?>"
-            href="<?= route('campaigns.index') ?>"
-        >Campanhas</a>
-
-        <a
-            class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors"
-            href="#"
-        >Criar Campanha</a>
-
-        <a
-            class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors"
-            href="#"
-        >Buscar Cliente</a>
+         ?>
+         <a
+           class="<?php echo $isCampaignsActive ? 'text-primary text-sm font-bold border-b-2 border-primary pb-1' : 'text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors'; ?>"
+           href="<?= route('campaigns.index') ?>"
+           >Campanhas</a
+         >
+         <a
+           class="<?php echo $isCriarCampanhaActive ? 'text-primary text-sm font-bold border-b-2 border-primary pb-1' : 'text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors'; ?>"
+           href="<?= route('campaigns.new') ?>"
+           >Criar Campanha</a 
+         >
+         <a
+           class="<?php echo $isBuscarClienteActive ? 'text-primary text-sm font-bold border-b-2 border-primary pb-1' : 'text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors'; ?>"
+           href="#" 
+           >Buscar Cliente</a
+         >
 
         <?php if ($this->currentUser() && $this->currentUser()->isAdmin()): ?>
-            <a
-                class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors"
-                href="<?= route('users.index') ?>"
-            >Usuários</a>
+          <a
+            class="<?php echo $isUsuariosActive ? 'text-primary text-sm font-bold border-b-2 border-primary pb-1' : 'text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors'; ?>"
+            href="<?php echo route('users.index'); ?>"
+            >Usuários</a
+          >
         <?php endif; ?>
-    </nav>
+      </nav>
 
 
        <div class="flex items-center gap-4">

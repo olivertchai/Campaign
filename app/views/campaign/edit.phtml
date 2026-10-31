@@ -1,0 +1,250 @@
+<main class="flex-1 flex justify-center py-8 px-4 lg:px-40">
+  <div class="max-w-4xl w-full flex flex-col gap-8">
+    <!-- Page Header -->
+    <div
+      class="flex flex-col md:flex-row md:items-center justify-between gap-4"
+    >
+      <div class="flex items-center gap-4">
+        <a href="<?= route('campaigns.index') ?>"> 
+          <button
+            type="button"
+            class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 transition-colors"
+          >
+            <span class="material-symbols-outlined">
+              arrow_back
+            </span>
+          </button>
+        </a>
+
+        <div class="flex flex-col">
+          <h1 class="text-3xl font-bold tracking-tight">
+            <?= $campaign->title ?>
+          </h1>
+          <p class="text-slate-500 dark:text-slate-400 text-sm">
+            Crie e configure uma nova campanha de marketing
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <section
+      class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 lg:p-8 shadow-sm"
+    >
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-2">
+          <?= $title ?>
+        </h2>
+        <p class="text-slate-500 dark:text-slate-400">
+          Preencha os dados abaixo para editar sua campanha de marketing.
+        </p>
+      </div>
+
+      <form action="<?= route('campaigns.update', ['id' =>$campaign->id]) ?>" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data" class="flex flex-col gap-6">
+          <input type="hidden" name="_method" value="PUT">
+          <input type="hidden" name="id" value="<?= $campaign->id ?>">
+
+        <!-- Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <label class="flex flex-col gap-2">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Título
+            </span>
+            <?php $titleErrors = $campaign->getErrorsIndex('title'); ?>
+            <input
+              class="rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 py-3 h-12 w-full text-sm outline-none transition-colors <?= !empty($titleErrors) ? 'border-red-500 dark:border-red-500 focus:ring-red-500' : '' ?>"
+              placeholder="Ex: Campanha de Verão 2024"
+              type="text"
+              name="campaign[title]"
+              value="<?= $campaign->title ?? '' ?>"
+            />
+
+            <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($titleErrors) ? 'hidden' : '' ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <?= !empty($titleErrors) ? (is_array($titleErrors) ? $titleErrors[0] : $titleErrors) : '' ?>
+            </span>
+          </label>
+
+          <div class="flex flex-col gap-2">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Imagem de Capa da Campanha
+            </span>
+            
+            <?php $imageErrors = $campaign->getErrorsIndex('campaign_image'); ?>
+            
+            <label class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer transition-colors overflow-hidden <?= !empty($imageErrors) ? 'border-red-500 bg-red-50/10' : 'border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50' ?>">
+              <input 
+                type="file" 
+                name="campaign_image" 
+                id="campaign_image_input" 
+                accept="image/*" 
+                class="hidden" 
+              />
+
+              <div id="preview_placeholder" class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 <?= $campaign->image_url ? 'hidden' : '' ?>">
+                <span class="material-symbols-outlined text-slate-400 text-3xl mb-2">cloud_upload</span>
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                  <span class="text-primary font-bold">Clique para enviar</span> ou arraste o arquivo
+                </p>
+                <p class="text-[10px] text-slate-400 mt-1">PNG, JPG ou WEBP (Máx: 2MB)</p>
+              </div>
+
+              <img 
+                id="image_preview" 
+                src="<?= $campaign->image()->path() ?>" 
+                alt="Preview da Imagem" 
+                class="w-full h-full object-cover absolute inset-0 <?= $campaign->image_url ? '' : 'hidden' ?>"
+              />
+            </label>
+
+            <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($imageErrors) ? 'hidden' : '' ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <?= !empty($imageErrors) ? (is_array($imageErrors) ? $imageErrors[0] : $imageErrors) : '' ?>
+            </span>
+          </div>
+
+        </div>
+        
+        <label class="flex flex-col gap-2">
+          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            Subtítulo
+          </span>
+          <?php $subtitleErrors = $campaign->getErrorsIndex('subtitle'); ?>
+          <input
+            class="rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 py-3 h-12 w-full text-sm outline-none transition-colors <?= !empty($subtitleErrors) ? 'border-red-500 dark:border-red-500 focus:ring-red-500' : '' ?>"
+            placeholder="Ex: Uma breve descrição complementar para a linha fina"
+            type="text"
+            name="campaign[subtitle]"
+            value="<?= $campaign->subtitle ?? '' ?>"
+          />
+
+          <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($subtitleErrors) ? 'hidden' : '' ?>">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg>
+            <?= !empty($subtitleErrors) ? (is_array($subtitleErrors) ? $subtitleErrors[0] : $subtitleErrors) : '' ?>
+          </span>
+        </label>
+        <!-- Description -->
+        <label class="flex flex-col gap-2">
+          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            Descrição
+          </span>
+          <?php $descErrors = $campaign->getErrorsIndex('description'); ?>
+          <textarea
+            class="rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 py-3 w-full text-sm resize-none outline-none transition-colors <?= !empty($descErrors) ? 'border-red-500 dark:border-red-500 focus:ring-red-500' : '' ?>"
+            placeholder="Descreva os objetivos e detalhes da campanha..."
+            rows="4"
+            name="campaign[description]"
+          ><?= $campaign->description ?? '' ?></textarea>
+
+           <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($descErrors) ? 'hidden' : '' ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <?= !empty($descErrors) ? (is_array($descErrors) ? $descErrors[0] : $descErrors) : '' ?>
+            </span>
+        </label>
+
+        <!-- Dates -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <label class="flex flex-col gap-2">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Data de Início
+            </span>
+            
+            <?php $startDateErrors = $campaign->getErrorsIndex('start_date'); ?>
+            
+            <input
+              class="rounded-xl bg-white dark:bg-slate-800 px-4 py-3 h-12 w-full text-sm outline-none transition-colors <?= !empty($startDateErrors) ? 'border-2 border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500' : 'border border-slate-200 dark:border-slate-700 focus:ring-primary focus:border-primary' ?>"
+              type="date"
+              name="campaign[start_date]"
+              value="<?= is_string($campaign->start_date) ? $campaign->start_date : ($campaign->start_date?->format('Y-m-d') ?? '') ?>"            />
+            
+            <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($startDateErrors) ? 'hidden' : '' ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <?= !empty($startDateErrors) ? (is_array($startDateErrors) ? $startDateErrors[0] : $startDateErrors) : '' ?>
+            </span>
+          </label>
+
+          <label class="flex flex-col gap-2 mt-4">
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
+              Data de Término
+            </span>
+            
+            <?php $endDateErrors = $campaign->getErrorsIndex('end_date'); ?>
+            
+            <input
+              class="rounded-xl bg-white dark:bg-slate-800 px-4 py-3 h-12 w-full text-sm outline-none transition-colors <?= !empty($endDateErrors) ? 'border-2 border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500' : 'border border-slate-200 dark:border-slate-700 focus:ring-primary focus:border-primary' ?>"
+              type="date"
+              name="campaign[end_date]"
+              value="<?= is_string($campaign->end_date) ? $campaign->end_date : ($campaign->end_date?->format('Y-m-d') ?? '') ?>"
+            />
+            
+            <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($endDateErrors) ? 'hidden' : '' ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <?= !empty($endDateErrors) ? (is_array($endDateErrors) ? $endDateErrors[0] : $endDateErrors) : '' ?>
+            </span>
+          </label>
+        </div>
+
+        <!-- Lead -->
+        <div class="flex flex-col gap-2">
+          <span
+            class="text-sm font-semibold text-slate-700 dark:text-slate-200"
+            >Perfil de Lead</span
+          >
+
+          <div class="flex gap-3">
+            <select
+              class="flex-1 rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 py-3 h-12 text-sm"
+              name="campaign[lead_profile_id]"
+            >
+              <option disabled selected value="">
+                Selecione um perfil
+              </option>
+              <option value="1">Interesse em Tecnologia</option>
+              <option value="2">Decisores B2B</option>
+              <option value="3">Varejo High-end</option>
+            </select>
+
+            <button
+              type="button"
+              class="flex items-center gap-2 px-4 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-semibold hover:bg-slate-200 transition-colors"
+            >
+              <span class="material-symbols-outlined">add</span>
+              Novo Perfil
+            </button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div
+          class="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-100 dark:border-slate-800"
+        >
+          <button
+            type="button"
+            class="px-6 h-12 rounded-xl border border-slate-300 text-sm font-semibold hover:bg-slate-50"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="px-8 h-12 rounded-xl bg-primary text-white text-sm font-bold hover:opacity-90"
+          >
+            Editar Campanha
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</main>
