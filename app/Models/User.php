@@ -26,17 +26,6 @@ class User extends Model
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
 
-    /**
-     * Define valores padrão para campos obrigatórios quando não informados
-     */
-    public function __construct(array $params = [])
-    {
-        $params['role'] ??= 'manager_marketing';
-        $params['active'] ??= true;
-
-        parent::__construct($params);
-    }
-
     public function campaigns(): HasMany
     {
         return $this->hasMany(Campaign::class, 'user_id');
