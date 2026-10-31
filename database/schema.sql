@@ -12,4 +12,15 @@ CREATE TABLE users (
     active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE TABLE campaigns (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    start_date DATE,
+    end_date DATE,
+    status VARCHAR(50),
+    image_url VARCHAR(255)
+);
+
 SET session_replication_role = DEFAULT;
