@@ -66,69 +66,8 @@
               <?= !empty($titleErrors) ? (is_array($titleErrors) ? $titleErrors[0] : $titleErrors) : '' ?>
             </span>
           </label>
-
-          <div class="flex flex-col gap-2">
-            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-              Imagem de Capa da Campanha
-            </span>
-            
-            <?php $imageErrors = $campaign->getErrorsIndex('campaign_image'); ?>
-            
-            <label class="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-xl cursor-pointer transition-colors overflow-hidden <?= !empty($imageErrors) ? 'border-red-500 bg-red-50/10' : 'border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50' ?>">
-              <input 
-                type="file" 
-                name="campaign_image" 
-                id="campaign_image_input" 
-                accept="image/*" 
-                class="hidden" 
-              />
-
-              <div id="preview_placeholder" class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4 <?= $campaign->image_url ? 'hidden' : '' ?>">
-                <span class="material-symbols-outlined text-slate-400 text-3xl mb-2">cloud_upload</span>
-                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  <span class="text-primary font-bold">Clique para enviar</span> ou arraste o arquivo
-                </p>
-                <p class="text-[10px] text-slate-400 mt-1">PNG, JPG ou WEBP (Máx: 2MB)</p>
-              </div>
-
-              <img 
-                id="image_preview" 
-                src="<?= $campaign->image()->path() ?>" 
-                alt="Preview da Imagem" 
-                class="w-full h-full object-cover absolute inset-0 <?= $campaign->image_url ? '' : 'hidden' ?>"
-              />
-            </label>
-
-            <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($imageErrors) ? 'hidden' : '' ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-              </svg>
-              <?= !empty($imageErrors) ? (is_array($imageErrors) ? $imageErrors[0] : $imageErrors) : '' ?>
-            </span>
-          </div>
-
         </div>
-        
-        <label class="flex flex-col gap-2">
-          <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">
-            Subtítulo
-          </span>
-          <?php $subtitleErrors = $campaign->getErrorsIndex('subtitle'); ?>
-          <input
-            class="rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary px-4 py-3 h-12 w-full text-sm outline-none transition-colors <?= !empty($subtitleErrors) ? 'border-red-500 dark:border-red-500 focus:ring-red-500' : '' ?>"
-            placeholder="Ex: Uma breve descrição complementar para a linha fina"
-            type="text"
-            name="campaign[subtitle]"
-            value="<?= $campaign->subtitle ?? '' ?>"
-          />
 
-          <span class="text-xs font-medium text-red-500 flex items-center gap-1 <?= empty($subtitleErrors) ? 'hidden' : '' ?>">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-            </svg>
-            <?= !empty($subtitleErrors) ? (is_array($subtitleErrors) ? $subtitleErrors[0] : $subtitleErrors) : '' ?>
-          </span>
-        </label>
         <!-- Description -->
         <label class="flex flex-col gap-2">
           <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">

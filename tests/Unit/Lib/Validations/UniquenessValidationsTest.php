@@ -15,7 +15,7 @@ class UniquenessValidationsTest extends TestCase
         Database::create();
         Database::exec('
             CREATE TABLE test_users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
                 email VARCHAR(50) UNIQUE NOT NULL,
                 phone VARCHAR(50)
             );

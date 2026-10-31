@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Core\Database\ActiveRecord\BelongsToMany;
+use Core\Database\ActiveRecord\HasMany;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
 use Core\Database\Database;
@@ -13,6 +15,8 @@ use Core\Database\Database;
  * @property string $encrypted_password
  * @property string $role
  * @property bool $active
+ * @property Campaign[] $campaigns
+ * @property Campaign[] $reinforced_campaigns
  */
 class User extends Model
 {
@@ -21,6 +25,16 @@ class User extends Model
 
     protected ?string $password = null;
     protected ?string $password_confirmation = null;
+
+    public function campaigns(): HasMany
+    {
+        return $this->hasMany(Campaign::class, 'user_id');
+    }
+
+    public function reinforcedCampaigns(): BelongsToMany
+    {
+        return $this->belongsToMany(Campaign::class, 'campaign_user_reinforce', 'user_id', 'campaign_id');
+    }
 
     public function isAdmin(): bool
     {
