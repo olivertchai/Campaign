@@ -15,7 +15,7 @@ class CampaignsController extends Controller
         $paginator = $this->current_user->campaigns()->paginate(page: $request->getParam('page', 1));
         $campaigns = $paginator->registers();
 
-        $title = 'Campanhas';
+        $title = 'Campanhas de Marketing';
 
         if ($request->acceptJson()) {
             $this->renderJson('campaign/index', compact('paginator', 'campaigns', 'title'));
