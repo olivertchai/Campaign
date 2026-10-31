@@ -87,8 +87,7 @@ class UniquenessValidationsTest extends TestCase
 
     public function test_uniqueness_update_change_email_to_one_registered(): void
     {
-        Database::exec('INSERT INTO test_users (email) values ("b@b.com")');
-
+        Database::exec("INSERT INTO test_users (email, phone) values ('b@b.com', '123456')");
         $model = new class () extends Model {
             protected static string $table = 'test_users';
             protected static array $columns = ['email'];
@@ -110,7 +109,7 @@ class UniquenessValidationsTest extends TestCase
 
     public function test_uniqueness_two_fields(): void
     {
-        Database::exec('INSERT INTO test_users (email, phone) values ("b@b.com", "123456789")');
+        Database::exec("INSERT INTO test_users (email, phone) values ('b@b.com', '123456789')");
 
         $model = new class () extends Model {
             protected static string $table = 'test_users';
