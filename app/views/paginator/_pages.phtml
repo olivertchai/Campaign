@@ -1,32 +1,48 @@
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-end">
+<div class="flex flex-col items-center justify-center w-full py-4 gap-3 px-2">
+  
+  <nav class="flex items-center gap-x-1 bg-white p-2 rounded-xl shadow-sm border border-gray-200" aria-label="Pagination">
+    
+    <?php if ($paginator->hasPreviousPage()) : ?>
+      <a href="<?= route($paginator->getRouteName(), ['page' => $paginator->previousPage()]) ?>" class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors" aria-label="Previous">
+        <svg aria-hidden="true" class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Anterior</span>
+      </a>
+    <?php else : ?>
+      <span class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-400 opacity-50 pointer-events-none" aria-label="Previous">
+        <svg aria-hidden="true" class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Anterior</span>
+      </span>
+    <?php endif; ?>
 
-        <?php if ($paginator->hasPreviousPage()) : ?>
-            <li class="page-item">
-                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $paginator->previousPage()]) ?>">Anterior</a>
-            </li>
+    <div class="flex items-center gap-x-1">
+      <?php for ($page = 1; $page <= $paginator->totalOfPages(); $page++) : ?>
+        <?php if ($paginator->isPage($page)) : ?>
+            <span class="min-h-9.5 min-w-9.5 flex justify-center items-center py-2 px-3 text-sm rounded-lg bg-orange-500 text-white font-semibold shadow-sm pointer-events-none" aria-current="page">
+            <?= $page ?>
+            </span>
         <?php else : ?>
-            <li class="page-item disabled">
-                <a class="page-link">Anterior</a>
-            </li>
+          <a href="<?= route($paginator->getRouteName(), ['page' => $page]) ?>" class="min-h-9.5 min-w-9.5 flex justify-center items-center text-gray-700 hover:bg-gray-100 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-100 transition-colors">
+            <?= $page ?>
+          </a>
         <?php endif; ?>
+      <?php endfor; ?>
+    </div>
 
-        <?php for ($page = 1; $page <= $paginator->totalOfPages(); $page++) : ?>
-            <li class="page-item <?= $paginator->isPage($page) ? 'active' : '' ?>">
-                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $page]) ?>"><?= $page ?></a>
-            </li>
-        <?php endfor; ?>
+    <?php if ($paginator->hasNextPage()) : ?>
+      <a href="<?= route($paginator->getRouteName(), ['page'=> $paginator->nextPage()]) ?>" class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors" aria-label="Next">
+        <span>Próxima</span>
+        <svg aria-hidden="true" class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    <?php else : ?>
+      <span class="min-h-9.5 min-w-9.5 py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-sm rounded-lg text-gray-400 opacity-50 pointer-events-none" aria-label="Next">
+        <span>Próxima</span>
+        <svg aria-hidden="true" class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </span>
+    <?php endif; ?>
+  </nav>
 
-        <?php if ($paginator->hasNextPage()) : ?>
-            <li class="page-item">
-                <a class="page-link" href="<?= route($paginator->getRouteName(), ['page' => $paginator->nextPage()]) ?>">Próxima</a>
-            </li>
-        <?php else : ?>
-            <li class="page-item disabled">
-                <a class="page-link">Próxima</a>
-            </li>
-        <?php endif; ?>
-    </ul>
-</nav>
-
-<div class="d-flex justify-content-end"><?= $paginator->entriesInfo() ?></div>
+  <div class="text-sm text-gray-500 font-medium">
+    <?= $paginator->entriesInfo() ?>
+  </div>
+  
+</div>
