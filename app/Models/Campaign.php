@@ -14,6 +14,7 @@ use Core\Database\ActiveRecord\Model;
  * @property \DateTime $start_date
  * @property \DateTime $end_date
  * @property string $status
+ * @property bool $paused
  * @property int $user_id
  * @property User $user
  * @property User[] $reinforced_by_users
@@ -28,8 +29,14 @@ class Campaign extends Model
         'start_date',
         'end_date',
         'status',
+        'paused',
         'user_id',
     ];
+
+    public function isPaused(): bool
+    {
+        return $this->paused === true;
+    }
 
     public function user(): BelongsTo
     {

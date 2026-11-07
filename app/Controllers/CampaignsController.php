@@ -103,4 +103,27 @@ class CampaignsController extends Controller
         FlashMessage::success('Campanha removida com sucesso!');
         $this->redirectTo(route('campaigns.index'));
     }
+
+    public function pause(Request $request): void
+    {
+        /** @var \App\Models\Campaign|null $campaign */
+        $campaign = $this->current_user->campaigns()->findById((int) $request->getParam('id'));
+
+        if (!$campaign) {
+            FlashMessage::danger('Campanha não encontrada!');
+            $this->redirectTo(route('campaigns.index'));
+            return;
+        }
+
+        $nextStateString = $campaign->isPaused() ? 'false' : 'true';
+
+        if ($campaign->update(['paused' => $nextStateString])) {
+            $message = ($nextStateString === 'true') ? 'Campanha pausada com sucesso!' : 'Campanha ativada com sucesso!';
+            FlashMessage::success($message);
+        } else {
+            FlashMessage::danger('Não foi possível alterar o estado da campanha!');
+        }
+
+        $this->redirectBack();
+    }
 }

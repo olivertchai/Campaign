@@ -20,6 +20,7 @@ CREATE TABLE campaigns (
     start_date DATE,
     end_date DATE,
     status VARCHAR(50),
+    paused BOOLEAN DEFAULT FALSE,
     image_url VARCHAR(255)
 );
 

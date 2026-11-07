@@ -11,7 +11,6 @@ Route::post('/login', [AuthenticationsController::class, 'authenticate'])->name(
 
 Route::middleware('auth')->group(function () {
     // index
-    Route::get('/', [CampaignsController::class, 'index'])->name('root');
     Route::get('/campaigns', [CampaignsController::class, 'index'])->name('campaigns.index');
 
     // Create
@@ -29,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // Delete
     Route::delete('/campaigns/{id}', [CampaignsController::class, 'destroy'])->name('campaigns.destroy');
+
+    // Pause
+    Route::post('/campaigns/{id}/pause', [CampaignsController::class, 'pause'])->name('campaigns.pause');
 
     // Logout
     Route::get('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');
