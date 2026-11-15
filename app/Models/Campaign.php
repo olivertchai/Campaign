@@ -6,6 +6,7 @@ use Core\Database\ActiveRecord\BelongsTo;
 use Core\Database\ActiveRecord\BelongsToMany;
 use Lib\Validations;
 use Core\Database\ActiveRecord\Model;
+use App\Services\CampaignImage;
 
 /**
  * @property int $id
@@ -18,6 +19,7 @@ use Core\Database\ActiveRecord\Model;
  * @property int $user_id
  * @property User $user
  * @property User[] $reinforced_by_users
+ * * @property string|null $image_url
  */
 class Campaign extends Model
 {
@@ -31,7 +33,11 @@ class Campaign extends Model
         'status',
         'paused',
         'user_id',
+        'image_url',
     ];
+
+    /** @var array<string, mixed>|null */
+    public ?array $campaign_image = null;
 
     public function isPaused(): bool
     {
@@ -63,5 +69,10 @@ class Campaign extends Model
     public function isSupportedByUser(User $user): bool
     {
         return CampaignUserReinforce::exists(['campaign_id' => $this->id, 'user_id' => $user->id]);
+    }
+
+    public function image(): CampaignImage
+    {
+        return new CampaignImage($this);
     }
 }
