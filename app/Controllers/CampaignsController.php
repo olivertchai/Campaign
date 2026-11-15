@@ -47,8 +47,11 @@ class CampaignsController extends Controller
         $params = $request->getParams();
         /** @var \App\Models\Campaign $campaign */
         $campaign = $this->current_user->campaigns()->new($params['campaign']);
+        $campaign->campaign_image = $_FILES['campaign_image'] ?? null;
 
         if ($campaign->save()) {
+            $campaign->image()->update($_FILES['campaign_image'] ?? []);
+
             FlashMessage::success('Campanha registrada com sucesso!');
             $this->redirectTo(route('campaigns.index'));
         } else {
@@ -82,8 +85,11 @@ class CampaignsController extends Controller
         $campaign->description = $params['description'];
         $campaign->start_date  = $params['start_date'];
         $campaign->end_date    = $params['end_date'];
+        $campaign->campaign_image = $_FILES['campaign_image'] ?? null;
 
         if ($campaign->save()) {
+            $campaign->image()->update($_FILES['campaign_image'] ?? []);
+            
             FlashMessage::success('Campanha atualizada com sucesso!');
             $this->redirectTo(route('campaigns.index'));
         } else {
