@@ -64,6 +64,15 @@ class Campaign extends Model
 
         // Validation start date not bigger than end date
         Validations::startDateDontBiggerEndDate('start_date', 'end_date', $this);
+
+        // Validation image size
+        Validations::maxFileSize('campaign_image', 2097152, $this);
+
+        Validations::fileType('campaign_image', [
+            'image/jpeg',
+            'image/png',
+            'image/webp'
+        ], $this);
     }
 
     public function isSupportedByUser(User $user): bool
