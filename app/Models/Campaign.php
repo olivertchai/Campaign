@@ -19,7 +19,7 @@ use App\Services\CampaignImage;
  * @property int $user_id
  * @property User $user
  * @property User[] $reinforced_by_users
- * * @property string|null $image_url
+ * @property string|null $image_url
  */
 class Campaign extends Model
 {

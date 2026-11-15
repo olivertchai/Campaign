@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Core\Constants\Constants;
-use Core\Database\ActiveRecord\Model;
+use App\Models\Campaign;
 
 class CampaignImage
 {
@@ -11,7 +11,7 @@ class CampaignImage
     private array $image = [];
 
     public function __construct(
-        private Model $model
+        private Campaign $model
     ) {
     }
 

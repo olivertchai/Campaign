@@ -125,7 +125,7 @@ class CampaignsController extends Controller
             FlashMessage::danger('Campanha não encontrada!');
             $this->redirectTo(route('campaigns.index'));
             return;
-        }   
+        }
 
         $nextStateString = $campaign->isPaused() ? 'false' : 'true';
 
