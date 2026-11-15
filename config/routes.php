@@ -10,8 +10,8 @@ Route::get('/login', [AuthenticationsController::class, 'new'])->name('users.log
 Route::post('/login', [AuthenticationsController::class, 'authenticate'])->name('users.authenticate');
 
 Route::middleware('auth')->group(function () {
-    // index
-    Route::get('/campaigns', [CampaignsController::class, 'index'])->name('campaigns.index');
+    // Home
+    Route::get('/', [CampaignsController::class, 'index'])->name('root');
 
     // Create
     Route::get('/pages/campaign/new', [CampaignsController::class, 'new'])->name('campaigns.new');
@@ -35,6 +35,6 @@ Route::middleware('auth')->group(function () {
     // Logout
     Route::get('/logout', [AuthenticationsController::class, 'destroy'])->name('users.logout');
 
-    //users
+    // Users
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');
 });
