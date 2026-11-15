@@ -47,8 +47,11 @@ class CampaignsController extends Controller
         $params = $request->getParams();
         /** @var \App\Models\Campaign $campaign */
         $campaign = $this->current_user->campaigns()->new($params['campaign']);
+        $campaign->campaign_image = $_FILES['campaign_image'] ?? null;
 
         if ($campaign->save()) {
+            $campaign->image()->update($_FILES['campaign_image'] ?? []);
+
             FlashMessage::success('Campanha registrada com sucesso!');
             $this->redirectTo(route('campaigns.index'));
         } else {
@@ -82,8 +85,11 @@ class CampaignsController extends Controller
         $campaign->description = $params['description'];
         $campaign->start_date  = $params['start_date'];
         $campaign->end_date    = $params['end_date'];
+        $campaign->campaign_image = $_FILES['campaign_image'] ?? null;
 
         if ($campaign->save()) {
+            $campaign->image()->update($_FILES['campaign_image'] ?? []);
+
             FlashMessage::success('Campanha atualizada com sucesso!');
             $this->redirectTo(route('campaigns.index'));
         } else {
@@ -97,10 +103,39 @@ class CampaignsController extends Controller
     {
         $params = $request->getParams();
 
+        /** @var \App\Models\Campaign|null $campaign */
         $campaign = $this->current_user->campaigns()->findById($params['id']);
-        $campaign->destroy();
 
-        FlashMessage::success('Campanha removida com sucesso!');
+        if ($campaign && $campaign->destroy()) {
+            $campaign->image()->destroy();
+            FlashMessage::success('Campanha removida com sucesso!');
+        } else {
+            FlashMessage::danger('Não foi possível remover a campanha!');
+        }
+
         $this->redirectTo(route('campaigns.index'));
+    }
+
+    public function pause(Request $request): void
+    {
+        /** @var \App\Models\Campaign|null $campaign */
+        $campaign = $this->current_user->campaigns()->findById((int) $request->getParam('id'));
+
+        if (!$campaign) {
+            FlashMessage::danger('Campanha não encontrada!');
+            $this->redirectTo(route('campaigns.index'));
+            return;
+        }
+
+        $nextStateString = $campaign->isPaused() ? 'false' : 'true';
+
+        if ($campaign->update(['paused' => $nextStateString])) {
+            $message = ($nextStateString === 'true') ? 'Campanha pausada com sucesso!' : 'Campanha ativada com sucesso!';
+            FlashMessage::success($message);
+        } else {
+            FlashMessage::danger('Não foi possível alterar o estado da campanha!');
+        }
+
+        $this->redirectBack();
     }
 }

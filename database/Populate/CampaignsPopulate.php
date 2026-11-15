@@ -11,15 +11,25 @@ class CampaignsPopulate
     {
         $user = User::findBy(['email' => 'fulano@example.com']);
 
-        // Trava de segurança para você saber exatamente se falhou
         if (!$user) {
-            die("Erro Crítico: Nenhum usuário encontrado para vincular as campanhas.\n");
+            die("Erro Crítico: Nenhum usuário 'fulano@example.com' encontrado para vincular as campanhas.\n");
         }
 
         $numberOfCampaigns = 100;
         for ($i = 0; $i < $numberOfCampaigns; $i++) {
-            $campaign = new Campaign(['title' => 'Campaign ' . $i, 'user_id' => $user->id]);
-            $campaign->save();
+            $campaign = new Campaign([
+                'title'       => 'Campaign ' . $i,
+                'description' => 'Descrição de teste para a campanha ' . $i,
+                'start_date'  => date('Y-m-d'),
+                'end_date'    => date('Y-m-d', strtotime('+30 days')),
+                'status'      => 'active',
+                'user_id'     => $user->id
+            ]);
+
+            if (!$campaign->save()) {
+                echo "Erro ao salvar a campanha $i:\n";
+                print_r($campaign->getErrorsIndex());
+            }
         }
 
         echo "Campaigns populated with $numberOfCampaigns registers\n";

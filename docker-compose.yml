@@ -17,6 +17,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     networks:
       - app-network
     working_dir: /var/www

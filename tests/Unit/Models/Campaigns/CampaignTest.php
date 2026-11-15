@@ -156,4 +156,24 @@ class CampaignTest extends TestCase
     {
         $this->assertInstanceOf(Paginator::class, Campaign::paginate());
     }
+
+    public function test_is_paused_should_return_true_or_false(): void
+    {
+        $paused = new Campaign(['paused' => true]);
+        $active = new Campaign(['paused' => false]);
+
+        $this->assertTrue($paused->isPaused());
+        $this->assertFalse($active->isPaused());
+    }
+
+    public function test_update_should_change_the_state(): void
+    {
+        $this->assertFalse(Campaign::findById($this->campaign->id)->isPaused());
+
+        $this->campaign->update(['paused' => 'true']);
+        $this->assertTrue(Campaign::findById($this->campaign->id)->isPaused());
+
+        $this->campaign->update(['paused' => 'false']);
+        $this->assertFalse(Campaign::findById($this->campaign->id)->isPaused());
+    }
 }
