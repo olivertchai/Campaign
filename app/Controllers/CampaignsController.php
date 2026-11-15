@@ -89,7 +89,7 @@ class CampaignsController extends Controller
 
         if ($campaign->save()) {
             $campaign->image()->update($_FILES['campaign_image'] ?? []);
-            
+
             FlashMessage::success('Campanha atualizada com sucesso!');
             $this->redirectTo(route('campaigns.index'));
         } else {
@@ -103,10 +103,16 @@ class CampaignsController extends Controller
     {
         $params = $request->getParams();
 
+        /** @var \App\Models\Campaign|null $campaign */
         $campaign = $this->current_user->campaigns()->findById($params['id']);
-        $campaign->destroy();
 
-        FlashMessage::success('Campanha removida com sucesso!');
+        if ($campaign && $campaign->destroy()) {
+            $campaign->image()->destroy();
+            FlashMessage::success('Campanha removida com sucesso!');
+        } else {
+            FlashMessage::danger('Não foi possível remover a campanha!');
+        }
+
         $this->redirectTo(route('campaigns.index'));
     }
 
@@ -119,7 +125,7 @@ class CampaignsController extends Controller
             FlashMessage::danger('Campanha não encontrada!');
             $this->redirectTo(route('campaigns.index'));
             return;
-        }
+        }   
 
         $nextStateString = $campaign->isPaused() ? 'false' : 'true';
 

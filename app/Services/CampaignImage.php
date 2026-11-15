@@ -8,7 +8,7 @@ use Core\Database\ActiveRecord\Model;
 class CampaignImage
 {
     /** @var array<string, mixed> $image */
-    private array $image;
+    private array $image = [];
 
     public function __construct(
         private Model $model
@@ -32,8 +32,19 @@ class CampaignImage
 
         if (!empty($this->getTmpFilePath())) {
             $this->removeOldImage();
-            $this->model->update(['image_url' => $this->getFileName()]);
-            move_uploaded_file($this->getTmpFilePath(), $this->getAbsoluteFilePath());
+            $fileName = $this->getFileName();
+            $this->model->update(['image_url' => $fileName]);
+            move_uploaded_file($this->getTmpFilePath(), $this->getAbsoluteFilePath($fileName));
+        }
+    }
+
+    public function destroy(): void
+    {
+        $this->removeOldImage();
+
+        $dir = (string) Constants::rootPath()->join('public' . $this->baseDir());
+        if (is_dir($dir)) {
+            rmdir($dir);
         }
     }
 
@@ -45,7 +56,7 @@ class CampaignImage
     private function removeOldImage(): void
     {
         if ($this->model->image_url) {
-            $path = Constants::rootPath()
+            $path = (string) Constants::rootPath()
                 ->join('public' . $this->baseDir())
                 ->join($this->model->image_url);
 
@@ -59,12 +70,12 @@ class CampaignImage
     {
         $parts = explode('.', $this->image['name']);
         $extension = end($parts);
-        return 'image.' . $extension;
+        return 'image_' . uniqid() . '.' . $extension;
     }
 
-    private function getAbsoluteFilePath(): string
+    private function getAbsoluteFilePath(string $fileName): string
     {
-        return $this->storeDir() . $this->getFileName();
+        return $this->storeDir() . $fileName;
     }
 
     private function baseDir(): string
@@ -74,7 +85,7 @@ class CampaignImage
 
     private function storeDir(): string
     {
-        $path = Constants::rootPath()->join('public' . $this->baseDir());
+        $path = (string) Constants::rootPath()->join('public' . $this->baseDir());
 
         if (!is_dir($path)) {
             mkdir(directory: $path, recursive: true);

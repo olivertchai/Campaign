@@ -40,7 +40,7 @@
         </p>
       </div>
 
-      <form action="<?= route('campaigns.update', ['id' =>$campaign->id]) ?>" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data" class="flex flex-col gap-6">
+      <form action="<?= route('campaigns.update', ['id' =>$campaign->id]) ?>" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
           <input type="hidden" name="_method" value="PUT">
           <input type="hidden" name="id" value="<?= $campaign->id ?>">
 
